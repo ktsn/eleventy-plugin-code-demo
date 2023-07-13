@@ -1,5 +1,6 @@
 const { outdent } = require('outdent');
 const ts = require('typescript');
+const { parse } = require('@vue/compiler-sfc');
 const { makeCodeDemoShortcode } = require('./utils');
 
 describe('makeCodeDemoShortcode', () => {
@@ -74,6 +75,51 @@ describe('makeCodeDemoShortcode', () => {
         `;
     expect(shortcode(source, 'title')).toStrictEqual(
       `<iframe title="title" srcdoc="&lt;!doctypehtml&gt;&lt;style&gt;button{padding:0}&lt;/style&gt;&lt;body&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;script&gt;const add=(a,b)=&gt;a+ b&lt;/script&gt;"></iframe>`
+    );
+  });
+
+  it('preprocess: vue', () => {
+    const shortcode = makeCodeDemoShortcode({
+      renderDocument: ({ html, css, js }) => `
+      <!doctype html>
+      <html>
+      <head>
+        <style>${css}</style>
+      </head>
+      <body>
+        <div id="app">${html}</div>
+        <script>${js}</script>
+      </body>
+      </html>`,
+      preprocess: {
+        vue: (source) => {
+          const { descriptor } = parse(source);
+          return [
+            {
+              type: 'html',
+              output: descriptor.template.content,
+            },
+            {
+              type: 'js',
+              output: descriptor.script.content,
+            },
+            {
+              type: 'css',
+              output: descriptor.styles.map((style) => style.content).join(''),
+            },
+          ];
+        },
+      },
+    });
+    const source = outdent`
+        \`\`\`vue
+        <template><button>Click me</button></template>
+        <style>button { padding: 0 }</style>
+        <script>console.log("test");</script>
+        \`\`\`
+        `;
+    expect(shortcode(source, 'title')).toStrictEqual(
+      `<iframe title="title" srcdoc="&lt;!doctypehtml&gt;&lt;style&gt;button{padding:0}&lt;/style&gt;&lt;body&gt;&lt;div id=app&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;/div&gt;&lt;script&gt;console.log(&quot;test&quot;)&lt;/script&gt;"></iframe>`
     );
   });
 

@@ -82,7 +82,7 @@ See [example usage](#example-usage) for how to use the shortcode. There's also a
 |`name`|`string\|undefined`|Optional. The name to use for the shortcode. Defaults to `'codeDemo'` if not specified.|
 |`renderDocument`|`(args: { html: string; css: string; js: string }) => string`|A render function to return custom markup for the document body of each iframe. This function will be called with the HTML, CSS, and JS parsed from your shortcode's children.|
 |`iframeAttributes`|`Record<string, unknown>\|undefined`|Optional. An object specifying attribute-value pairs that should get set globally on all code demos.|
-|`preprocess`|`Record<string, (source: string) => PreprocessOutput>\|undefined`|Optional. An object having source type key to a function returning preprocessor output.|
+|`preprocess`|`Record<string, (source: string) => PreprocessOutput\|PreprocessOutput[]>\|undefined`|Optional. An object having source type key to a function returning preprocessor output.|
 
 ## Shortcode Arguments
 

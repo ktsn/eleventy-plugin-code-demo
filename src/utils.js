@@ -8,7 +8,7 @@ const clsx = require('clsx');
  * Given an array of tokens and preprocessors, finds all such matching tokens and returns preprocessed
  * big string concatenating each type of output code.
  * @param {import('markdown-it/lib/token')[]} tokens
- * @param {Record<string, (source: string) => import('./typedefs').PreprocessOutput>} preprocess
+ * @param {Record<string, (source: string) => import('./typedefs').PreprocessOutput|import('./typedefs').PreprocessOutput[]>} preprocess
  */
 const parseCode = (tokens, preprocess) => {
   const html = [];
@@ -19,19 +19,22 @@ const parseCode = (tokens, preprocess) => {
     if (token.type === 'fence') {
       const { info, content } = token;
       const preprocessor = preprocess[info];
-      const { type, output } = preprocessor ? preprocessor(content) : { type: info, output: content };
+      const result = preprocessor ? preprocessor(content) : { type: info, output: content };
+      const results = Array.isArray(result) ? result : [result];
 
-      switch (type) {
-        case 'html':
-          html.push(output);
-          break;
-        case 'css':
-          css.push(output);
-          break;
-        case 'js':
-          js.push(output);
-          break;
-      }
+      results.forEach(({ type, output }) => {
+        switch (type) {
+          case 'html':
+            html.push(output);
+            break;
+          case 'css':
+            css.push(output);
+            break;
+          case 'js':
+            js.push(output);
+            break;
+        }
+      });
     }
   });
 
