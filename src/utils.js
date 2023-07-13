@@ -5,16 +5,42 @@ const outdent = require('outdent');
 const clsx = require('clsx');
 
 /**
- * Given an array of tokens and a type of token to look up, finds all such matching tokens and returns one
- * big string concatenating all of those tokens' content.
+ * Given an array of tokens and preprocessors, finds all such matching tokens and returns preprocessed
+ * big string concatenating each type of output code.
  * @param {import('markdown-it/lib/token')[]} tokens
- * @param {string} type
+ * @param {Record<string, (source: string) => import('./typedefs').PreprocessOutput>} preprocess
  */
-const parseCode = (tokens, type) =>
-  tokens
-    .filter((token) => token.info === type)
-    .map((token) => token.content)
-    .join('');
+const parseCode = (tokens, preprocess) => {
+  const html = [];
+  const css = [];
+  const js = [];
+
+  tokens.forEach((token) => {
+    if (token.type === 'fence') {
+      const { info, content } = token;
+      const preprocessor = preprocess[info];
+      const { type, output } = preprocessor ? preprocessor(content) : { type: info, output: content };
+
+      switch (type) {
+        case 'html':
+          html.push(output);
+          break;
+        case 'css':
+          css.push(output);
+          break;
+        case 'js':
+          js.push(output);
+          break;
+      }
+    }
+  });
+
+  return {
+    html: html.join(''),
+    css: css.join(''),
+    js: js.join(''),
+  };
+};
 
 /** Maps a config of attribute-value pairs to an HTML string representing those same attribute-value pairs.
  * There's also this, but it's ESM only: https://github.com/sindresorhus/stringify-attributes
@@ -52,9 +78,7 @@ const makeCodeDemoShortcode = (options) => {
     }
 
     const tokens = markdownIt().parse(source);
-    const html = parseCode(tokens, 'html');
-    const css = parseCode(tokens, 'css');
-    const js = parseCode(tokens, 'js');
+    const { html, css, js } = parseCode(tokens, options.preprocess ?? {});
 
     // Allow users to customize their document structure, given this HTML, CSS, and JS
     let srcdoc = options.renderDocument({ html, css, js });
@@ -71,8 +95,8 @@ const makeCodeDemoShortcode = (options) => {
     srcdoc = escape(srcdoc);
 
     let iframeAttributes = { ...sharedIframeAttributes, ...props };
-    /* Do this separately to allow for multiple class names. Note that this should 
-    technically also be done for other HTML attributes that could accept multiple 
+    /* Do this separately to allow for multiple class names. Note that this should
+    technically also be done for other HTML attributes that could accept multiple
     values, like aria-describedby. But it's not worth accounting for every possibility here. */
     const className = clsx(sharedIframeAttributes?.class, props.class);
     if (className) {
