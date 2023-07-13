@@ -1,7 +1,9 @@
 <!-- omit in toc -->
-# eleventy-plugin-code-demo
+# @ktsn/eleventy-plugin-code-demo
 
 > Add interactive HTML/CSS/JS code demos to an Eleventy site using Markdown code blocks.
+
+This plugin is a fork of [Aleksandr Hovhannisyan's eleventy-plugin-code-demo](https://github.com/AleksandrHovhannisyan/eleventy-plugin-code-demo). It adds `proprocess` option to support more source code types.
 
 This plugin adds a paired shortcode to your 11ty site that converts HTML, CSS, and JS Markdown code blocks into an interactive iframe. It was inspired by Maciej Mionskowski's idea in the following article: [Building HTML, CSS, and JS code preview using iframe's srcdoc attribute](https://mionskowski.pl/posts/iframe-code-preview/). In short, iframes don't need a `src`; you can define their HTML markup inline with the [`HTMLIFrameElement.srcdoc`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/srcdoc) attribute.
 
