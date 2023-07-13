@@ -35,8 +35,9 @@ const { EleventyPluginCodeDemo } = require('eleventy-plugin-code-demo');
 eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
   // Use any shortcode name you want
   name: 'shortcodeName',
-  /* Render whatever document structure you want. The HTML, CSS, and JS parsed 
-  from the shortcode's body are supplied to this function as an argument, so 
+
+  /* Render whatever document structure you want. The HTML, CSS, and JS parsed
+  from the shortcode's body are supplied to this function as an argument, so
   you can position them wherever you want, or add class names or data-attributes to html/body */
   renderDocument: ({ html, css, js }) => `
   <!DOCTYPE html>
@@ -49,11 +50,23 @@ eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
       <script>${js}</script>
     </body>
   </html>`,
+
   // key-value pairs for HTML attributes; these are applied to all code previews
   iframeAttributes: {
     height: '300',
     style: 'width: 100%;',
     frameborder: '0',
+  },
+
+  // Specify preprocessors. Object key is input source type. You must return an object having
+  // output `type` (either 'js', 'css' or 'html') and proprocessed `output` string.
+  preprocess: {
+    ts: (source) => {
+      return {
+        type: 'js',
+        output: compileTypeScript(source),
+      };
+    },
   },
 });
 ```
@@ -67,6 +80,7 @@ See [example usage](#example-usage) for how to use the shortcode. There's also a
 |`name`|`string\|undefined`|Optional. The name to use for the shortcode. Defaults to `'codeDemo'` if not specified.|
 |`renderDocument`|`(args: { html: string; css: string; js: string }) => string`|A render function to return custom markup for the document body of each iframe. This function will be called with the HTML, CSS, and JS parsed from your shortcode's children.|
 |`iframeAttributes`|`Record<string, unknown>\|undefined`|Optional. An object specifying attribute-value pairs that should get set globally on all code demos.|
+|`preprocess`|`Record<string, (source: string) => PreprocessOutput>\|undefined`|Optional. An object having source type key to a function returning preprocessor output.|
 
 ## Shortcode Arguments
 
