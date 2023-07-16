@@ -26,13 +26,13 @@ This plugin adds a paired shortcode to your 11ty site that converts HTML, CSS, a
 Install the package:
 
 ```
-yarn add -D eleventy-plugin-code-demo
+yarn add -D @ktsn/eleventy-plugin-code-demo
 ```
 
 Register it as a plugin in your Eleventy config:
 
 ```js
-const { EleventyPluginCodeDemo } = require('eleventy-plugin-code-demo');
+const { EleventyPluginCodeDemo } = require('@ktsn/eleventy-plugin-code-demo');
 
 eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
   // Use any shortcode name you want
