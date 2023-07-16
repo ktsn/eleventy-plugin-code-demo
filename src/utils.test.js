@@ -168,7 +168,7 @@ describe('makeCodeDemoShortcode', () => {
           \`\`\`
           `;
       expect(shortcode(source, 'title')).toStrictEqual(
-        `<iframe title="title" srcdoc="&lt;!doctypehtml&gt;&lt;style&gt;*{padding:0;margin:0}&lt;/style&gt;&lt;body&gt;"></iframe>`
+        `<iframe title="title" srcdoc="&lt;!doctypehtml&gt;&lt;style&gt;*{padding:0}*{margin:0}&lt;/style&gt;&lt;body&gt;"></iframe>`
       );
     });
 
