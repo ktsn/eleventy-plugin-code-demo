@@ -4,7 +4,7 @@ const { parse } = require('@vue/compiler-sfc');
 const { makeCodeDemoShortcode } = require('./utils');
 
 describe('makeCodeDemoShortcode', () => {
-  it('includes html, css, and js', () => {
+  it('includes html, css, and js', async () => {
     const shortcode = makeCodeDemoShortcode({
       renderDocument: ({ html, css, js }) => `
       <!doctype html>
@@ -29,12 +29,12 @@ describe('makeCodeDemoShortcode', () => {
         console.log("test");
         \`\`\`
         `;
-    expect(shortcode(source, 'title')).toStrictEqual(
-      `<iframe title="title" srcdoc="&lt;!doctypehtml&gt;&lt;style&gt;button{padding:0}&lt;/style&gt;&lt;body&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;script&gt;console.log(&quot;test&quot;)&lt;/script&gt;"></iframe>`
+    expect(await shortcode(source, 'title')).toStrictEqual(
+      `<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;style&gt;button{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;script&gt;console.log(&quot;test&quot;)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>`
     );
   });
 
-  it('preprocess: ts', () => {
+  it('preprocess: ts', async () => {
     const shortcode = makeCodeDemoShortcode({
       renderDocument: ({ html, css, js }) => `
       <!doctype html>
@@ -73,12 +73,12 @@ describe('makeCodeDemoShortcode', () => {
         const add = (a: number, b: number) => a + b
         \`\`\`
         `;
-    expect(shortcode(source, 'title')).toStrictEqual(
-      `<iframe title="title" srcdoc="&lt;!doctypehtml&gt;&lt;style&gt;button{padding:0}&lt;/style&gt;&lt;body&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;script&gt;const add=(a,b)=&gt;a+ b&lt;/script&gt;"></iframe>`
+    expect(await shortcode(source, 'title')).toStrictEqual(
+      `<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;style&gt;button{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;script&gt;const add=(d,a)=&gt;d+a&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>`
     );
   });
 
-  it('preprocess: vue', () => {
+  it('preprocess: vue', async () => {
     const shortcode = makeCodeDemoShortcode({
       renderDocument: ({ html, css, js }) => `
       <!doctype html>
@@ -118,13 +118,13 @@ describe('makeCodeDemoShortcode', () => {
         <script>console.log("test");</script>
         \`\`\`
         `;
-    expect(shortcode(source, 'title')).toStrictEqual(
-      `<iframe title="title" srcdoc="&lt;!doctypehtml&gt;&lt;style&gt;button{padding:0}&lt;/style&gt;&lt;body&gt;&lt;div id=app&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;/div&gt;&lt;script&gt;console.log(&quot;test&quot;)&lt;/script&gt;"></iframe>`
+    expect(await shortcode(source, 'title')).toStrictEqual(
+      `<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;style&gt;button{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div id=app&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;/div&gt;&lt;script&gt;console.log(&quot;test&quot;)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>`
     );
   });
 
   describe('merges multiple code blocks of the same type', () => {
-    test('html', () => {
+    test('html', async () => {
       const shortcode = makeCodeDemoShortcode({
         renderDocument: ({ html }) => `
         <!doctype html>
@@ -141,12 +141,12 @@ describe('makeCodeDemoShortcode', () => {
           <button>2</button>
           \`\`\`
           `;
-      expect(shortcode(source, 'title')).toStrictEqual(
-        `<iframe title="title" srcdoc="&lt;!doctypehtml&gt;&lt;body&gt;&lt;button&gt;1&lt;/button&gt;&lt;button&gt;2&lt;/button&gt;"></iframe>`
+      expect(await shortcode(source, 'title')).toStrictEqual(
+        `<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;button&gt;1&lt;/button&gt; &lt;button&gt;2&lt;/button&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>`
       );
     });
 
-    test('css', () => {
+    test('css', async () => {
       const shortcode = makeCodeDemoShortcode({
         renderDocument: ({ css }) => `
         <!doctype html>
@@ -167,12 +167,12 @@ describe('makeCodeDemoShortcode', () => {
           }
           \`\`\`
           `;
-      expect(shortcode(source, 'title')).toStrictEqual(
-        `<iframe title="title" srcdoc="&lt;!doctypehtml&gt;&lt;style&gt;*{padding:0}*{margin:0}&lt;/style&gt;&lt;body&gt;"></iframe>`
+      expect(await shortcode(source, 'title')).toStrictEqual(
+        `<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;style&gt;*{padding:0}*{margin:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>`
       );
     });
 
-    test('js', () => {
+    test('js', async () => {
       const shortcode = makeCodeDemoShortcode({
         renderDocument: ({ js }) => `
         <!doctype html>
@@ -189,12 +189,12 @@ describe('makeCodeDemoShortcode', () => {
           console.log("two");
           \`\`\`
           `;
-      expect(shortcode(source, 'title')).toStrictEqual(
-        `<iframe title="title" srcdoc="&lt;!doctypehtml&gt;&lt;body&gt;&lt;script&gt;console.log(&quot;one&quot;);console.log(&quot;two&quot;)&lt;/script&gt;"></iframe>`
+      expect(await shortcode(source, 'title')).toStrictEqual(
+        `<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;script&gt;console.log(&quot;one&quot;),console.log(&quot;two&quot;)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>`
       );
     });
 
-    test('with preprocessed code', () => {
+    test('with preprocessed code', async () => {
       const shortcode = makeCodeDemoShortcode({
         renderDocument: ({ js }) => `
         <!doctype html>
@@ -225,33 +225,35 @@ describe('makeCodeDemoShortcode', () => {
           console.log("two");
           \`\`\`
           `;
-      expect(shortcode(source, 'title')).toStrictEqual(
-        `<iframe title="title" srcdoc="&lt;!doctypehtml&gt;&lt;body&gt;&lt;script&gt;console.log(&quot;one&quot;);console.log(&quot;two&quot;)&lt;/script&gt;"></iframe>`
+      expect(await shortcode(source, 'title')).toStrictEqual(
+        `<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;script&gt;console.log(&quot;one&quot;),console.log(&quot;two&quot;)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>`
       );
     });
   });
 
-  it('respects global and per-usage attributes', () => {
+  it('respects global and per-usage attributes', async () => {
     const shortcode = makeCodeDemoShortcode({
       renderDocument: () => ``,
       iframeAttributes: { class: 'one', width: '300', height: '600' },
     });
-    expect(shortcode(``, 'title', { class: 'two' })).toStrictEqual(
+    expect(await shortcode(``, 'title', { class: 'two' })).toStrictEqual(
       `<iframe title="title" srcdoc="" class="one two" width="300" height="600"></iframe>`
     );
   });
 
-  it(`removes __keywords from Nunjucks keyword argument props`, () => {
+  it(`removes __keywords from Nunjucks keyword argument props`, async () => {
     const shortcode = makeCodeDemoShortcode({
       renderDocument: () => ``,
     });
-    expect(shortcode(``, 'title', { __keywords: true })).toStrictEqual(`<iframe title="title" srcdoc=""></iframe>`);
+    expect(await shortcode(``, 'title', { __keywords: true })).toStrictEqual(
+      `<iframe title="title" srcdoc=""></iframe>`
+    );
   });
 
-  it('throws an error if title is empty or undefined', () => {
+  it('throws an error if title is empty or undefined', async () => {
     const shortcode = makeCodeDemoShortcode({ renderDocument: () => `` });
-    expect(() => shortcode('')).toThrow();
-    expect(() => shortcode('', '')).toThrow();
-    expect(() => shortcode('', 'Non-empty title')).not.toThrow();
+    await expect(shortcode('')).rejects.toThrow();
+    await expect(shortcode('', '')).rejects.toThrow();
+    await expect(shortcode('', 'Non-empty title')).resolves.not.toThrow();
   });
 });

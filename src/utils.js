@@ -1,5 +1,5 @@
 const escape = require('lodash.escape');
-const minifyHtml = require('@minify-html/node');
+const minifyHtml = require('html-minifier-terser');
 const markdownIt = require('markdown-it');
 const outdent = require('outdent');
 const clsx = require('clsx');
@@ -68,9 +68,9 @@ const makeCodeDemoShortcode = (options) => {
   /**
    * @param {string} source The children of this shortcode, as Markdown code blocks.
    * @param {string} title The title to set on the iframe.
-   * @param {Record<string, unknown>} props HTML attributes to set on this specific `<iframe>`.
+   * @param {Promise<Record<string, unknown>>} props HTML attributes to set on this specific `<iframe>`.
    */
-  const codeDemoShortcode = (source, title, props = {}) => {
+  const codeDemoShortcode = async (source, title, props = {}) => {
     if (!title) {
       throw new Error(`${options.name}: you must provide a non-empty title for the iframe.`);
     }
@@ -88,11 +88,14 @@ const makeCodeDemoShortcode = (options) => {
     // We have to check this or Buffer.from will throw segfaults
     if (srcdoc) {
       // Convert all the HTML/CSS/JS into one long string with zero non-essential white space, comments, etc.
-      srcdoc = minifyHtml.minify(Buffer.from(srcdoc), {
-        keep_spaces_between_attributes: false,
+      srcdoc = await minifyHtml.minify(srcdoc, {
         // Only need to minify these two if they're present
-        minify_css: !!css,
-        minify_js: !!js,
+        minifyCSS: !!css,
+        minifyJS: !!js,
+        removeComments: true,
+        removeAttributeQuotes: true,
+        collapseWhitespace: true,
+        useShortDoctype: true,
       });
     }
     srcdoc = escape(srcdoc);
