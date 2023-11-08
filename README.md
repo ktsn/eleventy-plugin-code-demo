@@ -3,7 +3,7 @@
 
 > Add interactive HTML/CSS/JS code demos to an Eleventy site using Markdown code blocks.
 
-This plugin is a fork of [Aleksandr Hovhannisyan's eleventy-plugin-code-demo](https://github.com/AleksandrHovhannisyan/eleventy-plugin-code-demo). It adds `proprocess` option to support more source code types.
+This plugin is a fork of [Aleksandr Hovhannisyan's eleventy-plugin-code-demo](https://github.com/AleksandrHovhannisyan/eleventy-plugin-code-demo). It adds `proprocess` option to support more source code types, and ESModule support for JS code blocks.
 
 This plugin adds a paired shortcode to your 11ty site that converts HTML, CSS, and JS Markdown code blocks into an interactive iframe. It was inspired by Maciej Mionskowski's idea in the following article: [Building HTML, CSS, and JS code preview using iframe's srcdoc attribute](https://mionskowski.pl/posts/iframe-code-preview/). In short, iframes don't need a `src`; you can define their HTML markup inline with the [`HTMLIFrameElement.srcdoc`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/srcdoc) attribute.
 
@@ -217,6 +217,26 @@ Or this:
 ```
 
 > If you're using Liquid, keep an eye on this issue for keyword-argument support: https://github.com/11ty/eleventy/issues/2679. Or see my article here: [Passing Object Arguments to Liquid Shortcodes in 11ty](https://www.aleksandrhovhannisyan.com/blog/passing-object-arguments-to-liquid-shortcodes-in-11ty/).
+
+### ESModule Support for JavaScript Block
+
+JavaScript block can have `import` and `export` statements. You can specify filename for each block with the format of `@filename: ./name.js` to import it from another code block:
+
+````md
+{% codeDemo 'ESModule example' %}
+
+```js
+// @filename: ./test.js
+export const a = 1;
+```
+
+```js
+import { a } from './test.js';
+console.log(a);
+```
+
+{% endcodeDemo %}
+````
 
 ### Escaping and Minification
 

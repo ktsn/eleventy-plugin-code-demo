@@ -19,4 +19,10 @@
  * @property {Record<string, (source: string) => PreprocessOutput|PreprocessOutput[]>} [preprocess] A map of file type to preprocessors (optional).
  */
 
+/**
+ * @typedef CodeBlock
+ * @property {string} filename The filename of the code block.
+ * @property {string} code The code block's code.
+ */
+
 module.exports = {};
