@@ -70,7 +70,7 @@ async function bundleJsCode(jsBlocks) {
 
   const files = new Map();
   jsBlocks.forEach(({ filename = mainFilename, code }) => {
-    const resolvedPath = filename.startsWith('@') ? filename : path.resolve('/', filename);
+    const resolvedPath = filename === mainFilename ? filename : path.resolve('/', filename);
     const existing = files.get(resolvedPath) ?? '';
     files.set(resolvedPath, existing + code);
   });
@@ -85,6 +85,9 @@ async function bundleJsCode(jsBlocks) {
 
     bundle: true,
     write: false,
+    format: 'esm',
+
+    external: ['*'],
 
     plugins: [
       {
@@ -93,8 +96,8 @@ async function bundleJsCode(jsBlocks) {
           build.onResolve({ filter: /.*/ }, (args) => {
             if (args.path.search(/^[./]/) < 0) {
               return {
-                namespace: 'virtual',
-                path: '@' + args.path,
+                external: true,
+                path: args.path,
               };
             }
             return {

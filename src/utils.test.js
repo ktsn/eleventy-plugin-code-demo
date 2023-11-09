@@ -29,8 +29,8 @@ describe('makeCodeDemoShortcode', () => {
         console.log("test");
         \`\`\`
         `;
-    expect(await shortcode(source, 'title')).toStrictEqual(
-      `<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;style&gt;button{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;script&gt;console.log(&quot;test&quot;)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>`
+    expect(await shortcode(source, 'title')).toMatchInlineSnapshot(
+      `"<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;style&gt;button{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;script&gt;console.log(&quot;test&quot;)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>"`
     );
   });
 
@@ -74,8 +74,8 @@ describe('makeCodeDemoShortcode', () => {
         console.log(add(a, b))
         \`\`\`
         `;
-    expect(await shortcode(source, 'title')).toStrictEqual(
-      `<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;style&gt;button{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;script&gt;(()=&gt;{var o,l;console.log((o=a,l=b,o+l))})()&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>`
+    expect(await shortcode(source, 'title')).toMatchInlineSnapshot(
+      `"<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;style&gt;button{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;script&gt;var add=(a,d)=&gt;a+d;console.log(add(a,b))&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>"`
     );
   });
 
@@ -119,8 +119,8 @@ describe('makeCodeDemoShortcode', () => {
         <script>console.log("test");</script>
         \`\`\`
         `;
-    expect(await shortcode(source, 'title')).toStrictEqual(
-      `<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;style&gt;button{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div id=app&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;/div&gt;&lt;script&gt;console.log(&quot;test&quot;)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>`
+    expect(await shortcode(source, 'title')).toMatchInlineSnapshot(
+      `"<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;style&gt;button{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div id=app&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;/div&gt;&lt;script&gt;console.log(&quot;test&quot;)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>"`
     );
   });
 
@@ -142,8 +142,8 @@ describe('makeCodeDemoShortcode', () => {
           <button>2</button>
           \`\`\`
           `;
-      expect(await shortcode(source, 'title')).toStrictEqual(
-        `<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;button&gt;1&lt;/button&gt; &lt;button&gt;2&lt;/button&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>`
+      expect(await shortcode(source, 'title')).toMatchInlineSnapshot(
+        `"<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;button&gt;1&lt;/button&gt; &lt;button&gt;2&lt;/button&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>"`
       );
     });
 
@@ -168,8 +168,8 @@ describe('makeCodeDemoShortcode', () => {
           }
           \`\`\`
           `;
-      expect(await shortcode(source, 'title')).toStrictEqual(
-        `<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;style&gt;*{padding:0}*{margin:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>`
+      expect(await shortcode(source, 'title')).toMatchInlineSnapshot(
+        `"<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;style&gt;*{padding:0}*{margin:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>"`
       );
     });
 
@@ -190,8 +190,8 @@ describe('makeCodeDemoShortcode', () => {
           console.log("two");
           \`\`\`
           `;
-      expect(await shortcode(source, 'title')).toStrictEqual(
-        `<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;script&gt;console.log(&quot;one&quot;),console.log(&quot;two&quot;)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>`
+      expect(await shortcode(source, 'title')).toMatchInlineSnapshot(
+        `"<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;script&gt;console.log(&quot;one&quot;),console.log(&quot;two&quot;)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>"`
       );
     });
 
@@ -206,7 +206,7 @@ describe('makeCodeDemoShortcode', () => {
       });
       const source = outdent`
           \`\`\`js
-          // @filename: ./index.js
+          // @filename: index.js
           export const a = 1;
           \`\`\`
           \`\`\`js
@@ -214,8 +214,8 @@ describe('makeCodeDemoShortcode', () => {
           console.log(a);
           \`\`\`
           `;
-      expect(await shortcode(source, 'title')).toStrictEqual(
-        '<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;script&gt;console.log(1)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>'
+      expect(await shortcode(source, 'title')).toMatchInlineSnapshot(
+        `"<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;script&gt;var a=1;console.log(a)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>"`
       );
     });
 
@@ -230,16 +230,12 @@ describe('makeCodeDemoShortcode', () => {
       });
       const source = outdent`
           \`\`\`js
-          // @filename: @some-library
-          export const a = 1;
-          \`\`\`
-          \`\`\`js
           import { a } from 'some-library';
           console.log(a);
           \`\`\`
           `;
-      expect(await shortcode(source, 'title')).toStrictEqual(
-        '<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;script&gt;console.log(1)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>'
+      expect(await shortcode(source, 'title')).toMatchInlineSnapshot(
+        `"<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;script&gt;import{a}from&quot;some-library&quot;;console.log(a)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>"`
       );
     });
 
@@ -274,8 +270,8 @@ describe('makeCodeDemoShortcode', () => {
           console.log("two");
           \`\`\`
           `;
-      expect(await shortcode(source, 'title')).toStrictEqual(
-        `<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;script&gt;console.log(&quot;one&quot;),console.log(&quot;two&quot;)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>`
+      expect(await shortcode(source, 'title')).toMatchInlineSnapshot(
+        `"<iframe title="title" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;script&gt;console.log(&quot;one&quot;),console.log(&quot;two&quot;)&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>"`
       );
     });
   });
@@ -285,8 +281,8 @@ describe('makeCodeDemoShortcode', () => {
       renderDocument: () => ``,
       iframeAttributes: { class: 'one', width: '300', height: '600' },
     });
-    expect(await shortcode(``, 'title', { class: 'two' })).toStrictEqual(
-      `<iframe title="title" srcdoc="" class="one two" width="300" height="600"></iframe>`
+    expect(await shortcode(``, 'title', { class: 'two' })).toMatchInlineSnapshot(
+      `"<iframe title="title" srcdoc="" class="one two" width="300" height="600"></iframe>"`
     );
   });
 
@@ -294,8 +290,8 @@ describe('makeCodeDemoShortcode', () => {
     const shortcode = makeCodeDemoShortcode({
       renderDocument: () => ``,
     });
-    expect(await shortcode(``, 'title', { __keywords: true })).toStrictEqual(
-      `<iframe title="title" srcdoc=""></iframe>`
+    expect(await shortcode(``, 'title', { __keywords: true })).toMatchInlineSnapshot(
+      `"<iframe title="title" srcdoc=""></iframe>"`
     );
   });
 
